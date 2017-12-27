@@ -17,7 +17,7 @@
 
 static const char* driverName = "asynI2CDriver";
 
-asynI2CDriver::asynI2CDriver(const char* portName, int i2cPortNum, int i2cAddr,
+asynI2CDriver::asynI2CDriver(const char* portName, int i2cPortNum,
                              int maxAddrIn, int interfaceMask,
                              int interruptMask, int asynFlags, int autoConnect,
                              int priority, int stackSize)
@@ -25,7 +25,6 @@ asynI2CDriver::asynI2CDriver(const char* portName, int i2cPortNum, int i2cAddr,
                      asynFlags, autoConnect, priority, stackSize)
 {
     this->i2cPortNum = i2cPortNum;
-    this->i2cAddr    = (unsigned short)i2cAddr;
     this->fd         = -1;
 }
 
@@ -67,14 +66,15 @@ asynStatus asynI2CDriver::i2c_disconnect(asynUser* pasynUser)
     return status;
 }
 
-int asynI2CDriver::i2c_wr_rd(unsigned char* tx, unsigned short tx_n,
-                             unsigned char* rx, unsigned short rx_n)
+int asynI2CDriver::i2c_wr_rd(unsigned short addr, unsigned char* tx,
+                             unsigned short tx_n, unsigned char* rx,
+                             unsigned short rx_n)
 {
-    struct i2c_msg rdwr_msg[] = { {.addr  = this->i2cAddr,
+    struct i2c_msg rdwr_msg[] = { {.addr  = addr,
                                    .flags = 0, /* write */
                                    .len   = tx_n,
                                    .buf   = tx },
-                                  {.addr  = this->i2cAddr,
+                                  {.addr  = addr,
                                    .flags = I2C_M_RD, /* read */
                                    .len   = rx_n,
                                    .buf   = rx } };
