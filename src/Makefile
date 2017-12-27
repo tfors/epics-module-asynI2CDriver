@@ -18,6 +18,8 @@ LIBRARY_IOC += asynI2CDriver
 # specify all source files to be compiled and added to the library
 asynI2CDriver_SRCS += asynI2CDriver.cpp
 
+INC += asynI2CDriver.h
+
 asynI2CDriver_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 #===========================
