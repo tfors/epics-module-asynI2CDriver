@@ -88,3 +88,39 @@ int asynI2CDriver::i2c_wr_rd(unsigned short addr, unsigned char* tx,
     }
     return 0;
 }
+
+int asynI2CDriver::i2c_wr(unsigned short addr, unsigned char* tx,
+                          unsigned short tx_n)
+{
+    struct i2c_msg rdwr_msg[] = { {.addr  = addr,
+                                   .flags = 0, /* write */
+                                   .len   = tx_n,
+                                   .buf   = tx } };
+
+    struct i2c_rdwr_ioctl_data rdwr_data;
+    rdwr_data.msgs  = rdwr_msg;
+    rdwr_data.nmsgs = 1;
+
+    if (ioctl(this->fd, I2C_RDWR, &rdwr_data) < 0) {
+        return -1;
+    }
+    return 0;
+}
+
+int asynI2CDriver::i2c_rd(unsigned short addr, unsigned char* rx,
+                          unsigned short rx_n)
+{
+    struct i2c_msg rdwr_msg[] = { {.addr  = addr,
+                                   .flags = I2C_M_RD, /* read */
+                                   .len   = rx_n,
+                                   .buf   = rx } };
+
+    struct i2c_rdwr_ioctl_data rdwr_data;
+    rdwr_data.msgs  = rdwr_msg;
+    rdwr_data.nmsgs = 1;
+
+    if (ioctl(this->fd, I2C_RDWR, &rdwr_data) < 0) {
+        return -1;
+    }
+    return 0;
+}

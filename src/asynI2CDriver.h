@@ -24,4 +24,6 @@ protected:
     asynStatus i2c_disconnect(asynUser* pasynUser);
     int i2c_wr_rd(unsigned short addr, unsigned char* tx, unsigned short tx_n,
                   unsigned char* rx, unsigned short rx_n);
+    int i2c_wr(unsigned short addr, unsigned char* tx, unsigned short tx_n);
+    int i2c_rd(unsigned short addr, unsigned char* rx, unsigned short rx_n);
 };
